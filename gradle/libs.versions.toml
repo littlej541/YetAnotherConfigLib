@@ -1,6 +1,6 @@
 [versions]
 # Plugins
-architectury_loom = "1.1.+"
+architectury_loom = "1.0.+"
 architectury_plugin = "3.4.+"
 shadow = "7.1.+"
 quilt_quiltflower = "1.8.+"
