@@ -27,7 +27,7 @@ public class CategoryWidget extends TooltipButtonWidget {
             i = 2;
         }
 
-        return 46 + i * 20;
+        return i;
     }
 
     @Override

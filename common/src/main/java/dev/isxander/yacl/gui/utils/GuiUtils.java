@@ -45,11 +45,10 @@ public class GuiUtils {
     }
 
     public static void renderString(PoseStack matrices, Font font, Component message, int x, int y, int width, int height, int color) {
-        int left = x - 2;
-        int right = x + width - 2;
-        int center = (y + height - 9) / 2 + 1;
+        int centerX = x + width / 2;
+        int centerY = y + (height - 9) / 2 + 1;
 
-        GuiComponent.drawCenteredString(matrices, font, message, (left + right) / 2, center, color);
+        GuiComponent.drawCenteredString(matrices, font, message, centerX, centerY, color);
     }
 
     public static void renderTooltipBackground(BoxDrawer drawer, Matrix4f pose, BufferBuilder bufferBuilder, int x, int y, int width, int height, int z) {
