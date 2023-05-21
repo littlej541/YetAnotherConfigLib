@@ -20,6 +20,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.TextComponent;
 
 import java.awt.Color;
 import java.util.List;
@@ -27,18 +28,18 @@ import java.util.List;
 public class GuiTest {
     public static Screen getModConfigScreenFactory(Screen parent) {
         return YetAnotherConfigLib.create(ConfigTest.GSON, (defaults, config, builder) -> builder
-                        .title(Component.literal("Test Suites"))
+                        .title(new TextComponent("Test Suites"))
                         .category(ConfigCategory.createBuilder()
-                                .name(Component.literal("Suites"))
+                                .name(new TextComponent("Suites"))
                                 .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Full Test Suite"))
+                                        .name(new TextComponent("Full Test Suite"))
                                         .controller(ActionController::new)
                                         .action((screen, opt) -> Minecraft.getInstance().setScreen(getFullTestSuite(screen)))
                                         .build())
                                 .group(OptionGroup.createBuilder()
-                                        .name(Component.literal("Wiki"))
+                                        .name(new TextComponent("Wiki"))
                                         .option(ButtonOption.createBuilder()
-                                                .name(Component.literal("Get Started"))
+                                                .name(new TextComponent("Get Started"))
                                                 .controller(ActionController::new)
                                                 .action((screen, opt) -> Minecraft.getInstance().setScreen(getWikiGetStarted(screen)))
                                                 .build())
@@ -50,16 +51,16 @@ public class GuiTest {
 
     private static Screen getFullTestSuite(Screen parent) {
         return YetAnotherConfigLib.create(ConfigTest.GSON, (defaults, config, builder) -> builder
-                        .title(Component.literal("Test GUI"))
+                        .title(new TextComponent("Test GUI"))
                         .category(ConfigCategory.createBuilder()
-                                .name(Component.literal("Control Examples"))
-                                .tooltip(Component.literal("Example Category Description"))
+                                .name(new TextComponent("Control Examples"))
+                                .tooltip(new TextComponent("Example Category Description"))
                                 .group(OptionGroup.createBuilder()
-                                        .name(Component.literal("Boolean Controllers"))
-                                        .tooltip(Component.literal("Test!"))
+                                        .name(new TextComponent("Boolean Controllers"))
+                                        .tooltip(new TextComponent("Test!"))
                                         .option(Option.createBuilder(boolean.class)
-                                                .name(Component.literal("Boolean Toggle"))
-                                                .tooltip(value -> Component.literal("A simple toggle button that contains the value '" + value + "'"))
+                                                .name(new TextComponent("Boolean Toggle"))
+                                                .tooltip(value -> new TextComponent("A simple toggle button that contains the value '" + value + "'"))
                                                 .binding(
                                                         defaults.booleanToggle,
                                                         () -> config.booleanToggle,
@@ -69,20 +70,20 @@ public class GuiTest {
                                                 .flag(OptionFlag.GAME_RESTART)
                                                 .build())
                                         .option(Option.createBuilder(boolean.class)
-                                                .name(Component.literal("Custom Boolean Toggle"))
-                                                .tooltip(Component.literal("You can customize these controllers like this!"))
-                                                .tooltip(Component.empty())
-                                                .tooltip(opt -> Component.empty())
+                                                .name(new TextComponent("Custom Boolean Toggle"))
+                                                .tooltip(new TextComponent("You can customize these controllers like this!"))
+                                                .tooltip(TextComponent.EMPTY)
+                                                .tooltip(opt -> TextComponent.EMPTY)
                                                 .binding(
                                                         defaults.customBooleanToggle,
                                                         () -> config.customBooleanToggle,
                                                         (value) -> config.customBooleanToggle = value
                                                 )
-                                                .controller(opt -> new BooleanController(opt, state -> state ? Component.literal("Amazing") : Component.literal("Not Amazing"), true))
+                                                .controller(opt -> new BooleanController(opt, state -> state ? new TextComponent("Amazing") : new TextComponent("Not Amazing"), true))
                                                 .build())
                                         .option(Option.createBuilder(boolean.class)
-                                                .name(Component.literal("Tick Box"))
-                                                .tooltip(Component.literal("There are even alternate methods of displaying the same data type!"))
+                                                .name(new TextComponent("Tick Box"))
+                                                .tooltip(new TextComponent("There are even alternate methods of displaying the same data type!"))
                                                 .binding(
                                                         defaults.tickbox,
                                                         () -> config.tickbox,
@@ -92,9 +93,9 @@ public class GuiTest {
                                                 .build())
                                         .build())
                                 .group(OptionGroup.createBuilder()
-                                        .name(Component.literal("Slider Controllers"))
+                                        .name(new TextComponent("Slider Controllers"))
                                         .option(Option.createBuilder(int.class)
-                                                .name(Component.literal("Int Slider"))
+                                                .name(new TextComponent("Int Slider"))
                                                 .instant(true)
                                                 .binding(
                                                         defaults.intSlider,
@@ -105,7 +106,7 @@ public class GuiTest {
                                                 .controller(opt -> new IntegerSliderController(opt, 0, 3, 1))
                                                 .build())
                                         .option(Option.createBuilder(double.class)
-                                                .name(Component.literal("Double Slider"))
+                                                .name(new TextComponent("Double Slider"))
                                                 .binding(
                                                         defaults.doubleSlider,
                                                         () -> config.doubleSlider,
@@ -114,7 +115,7 @@ public class GuiTest {
                                                 .controller(opt -> new DoubleSliderController(opt, 0, 3, 0.05))
                                                 .build())
                                         .option(Option.createBuilder(float.class)
-                                                .name(Component.literal("Float Slider"))
+                                                .name(new TextComponent("Float Slider"))
                                                 .binding(
                                                         defaults.floatSlider,
                                                         () -> config.floatSlider,
@@ -123,7 +124,7 @@ public class GuiTest {
                                                 .controller(opt -> new FloatSliderController(opt, 0, 3, 0.1f))
                                                 .build())
                                         .option(Option.createBuilder(long.class)
-                                                .name(Component.literal("Long Slider"))
+                                                .name(new TextComponent("Long Slider"))
                                                 .binding(
                                                         defaults.longSlider,
                                                         () -> config.longSlider,
@@ -133,9 +134,9 @@ public class GuiTest {
                                                 .build())
                                         .build())
                                 .group(OptionGroup.createBuilder()
-                                        .name(Component.literal("Input Field Controllers"))
+                                        .name(new TextComponent("Input Field Controllers"))
                                         .option(Option.createBuilder(String.class)
-                                                .name(Component.literal("Component Option"))
+                                                .name(new TextComponent("Component Option"))
                                                 .binding(
                                                         defaults.textField,
                                                         () -> config.textField,
@@ -144,7 +145,7 @@ public class GuiTest {
                                                 .controller(StringController::new)
                                                 .build())
                                         .option(Option.createBuilder(Color.class)
-                                                .name(Component.literal("Color Option"))
+                                                .name(new TextComponent("Color Option"))
                                                 .binding(
                                                         defaults.colorOption,
                                                         () -> config.colorOption,
@@ -154,9 +155,9 @@ public class GuiTest {
                                                 .build())
                                         .build())
                                 .group(OptionGroup.createBuilder()
-                                        .name(Component.literal("Number Fields"))
+                                        .name(new TextComponent("Number Fields"))
                                         .option(Option.createBuilder(double.class)
-                                                .name(Component.literal("Double Field"))
+                                                .name(new TextComponent("Double Field"))
                                                 .binding(
                                                         defaults.doubleField,
                                                         () -> config.doubleField,
@@ -165,7 +166,7 @@ public class GuiTest {
                                                 .controller(DoubleFieldController::new)
                                                 .build())
                                         .option(Option.createBuilder(float.class)
-                                                .name(Component.literal("Float Field"))
+                                                .name(new TextComponent("Float Field"))
                                                 .binding(
                                                         defaults.floatField,
                                                         () -> config.floatField,
@@ -174,7 +175,7 @@ public class GuiTest {
                                                 .controller(FloatFieldController::new)
                                                 .build())
                                         .option(Option.createBuilder(int.class)
-                                                .name(Component.literal("Integer Field"))
+                                                .name(new TextComponent("Integer Field"))
                                                 .binding(
                                                         defaults.intField,
                                                         () -> config.intField,
@@ -183,7 +184,7 @@ public class GuiTest {
                                                 .controller(IntegerFieldController::new)
                                                 .build())
                                         .option(Option.createBuilder(long.class)
-                                                .name(Component.literal("Long Field"))
+                                                .name(new TextComponent("Long Field"))
                                                 .binding(
                                                         defaults.longField,
                                                         () -> config.longField,
@@ -193,9 +194,9 @@ public class GuiTest {
                                                 .build())
                                         .build())
                                 .group(OptionGroup.createBuilder()
-                                        .name(Component.literal("Enum Controllers"))
+                                        .name(new TextComponent("Enum Controllers"))
                                         .option(Option.createBuilder(ConfigTest.Alphabet.class)
-                                                .name(Component.literal("Enum Cycler"))
+                                                .name(new TextComponent("Enum Cycler"))
                                                 .binding(
                                                         defaults.enumOption,
                                                         () -> config.enumOption,
@@ -205,41 +206,26 @@ public class GuiTest {
                                                 .build())
                                         .build())
                                 .group(OptionGroup.createBuilder()
-                                        .name(Component.literal("Options that aren't really options"))
+                                        .name(new TextComponent("Options that aren't really options"))
                                         .option(ButtonOption.createBuilder()
-                                                .name(Component.literal("Button \"Option\""))
-                                                .action((screen, opt) -> SystemToast.add(Minecraft.getInstance().getToasts(), SystemToast.SystemToastIds.TUTORIAL_HINT, Component.literal("Button Pressed"), Component.literal("Button option was invoked!")))
+                                                .name(new TextComponent("Button \"Option\""))
+                                                .action((screen, opt) -> SystemToast.add(Minecraft.getInstance().getToasts(), SystemToast.SystemToastIds.TUTORIAL_HINT, new TextComponent("Button Pressed"), new TextComponent("Button option was invoked!")))
                                                 .controller(ActionController::new)
                                                 .build())
                                         .option(LabelOption.create(
-                                                Component.empty()
-                                                        .append(Component.literal("a").withStyle(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("a")))))
-                                                        .append(Component.literal("b").withStyle(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("b")))))
-                                                        .append(Component.literal("c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c").withStyle(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("c")))))
-                                                        .append(Component.literal("e").withStyle(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("e")))))
+                                                TextComponent.EMPTY.plainCopy()
+                                                        .append(new TextComponent("a").withStyle(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent("a")))))
+                                                        .append(new TextComponent("b").withStyle(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent("b")))))
+                                                        .append(new TextComponent("c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c").withStyle(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent("c")))))
+                                                        .append(new TextComponent("e").withStyle(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent("e")))))
                                                         .withStyle(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://isxander.dev"))))
                                         )
                                         .build())
-                                .group(OptionGroup.createBuilder()
-                                        .name(Component.literal("Minecraft Bindings"))
-                                        .tooltip(Component.literal("YACL can also bind Minecraft options!"))
-                                        .option(Option.createBuilder(boolean.class)
-                                                .name(Component.literal("Minecraft AutoJump"))
-                                                .tooltip(Component.literal("You can even bind minecraft options!"))
-                                                .binding(Binding.minecraft(Minecraft.getInstance().options.autoJump()))
-                                                .controller(TickBoxController::new)
-                                                .build())
-                                        .option(Option.createBuilder(GraphicsStatus.class)
-                                                .name(Component.literal("Minecraft Graphics Mode"))
-                                                .binding(Binding.minecraft(Minecraft.getInstance().options.graphicsMode()))
-                                                .controller(EnumController::new)
-                                                .build())
-                                        .build())
                                 .build())
                         .category(ConfigCategory.createBuilder()
-                                .name(Component.literal("List Test"))
+                                .name(new TextComponent("List Test"))
                                 .group(ListOption.createBuilder(String.class)
-                                        .name(Component.literal("String List"))
+                                        .name(new TextComponent("String List"))
                                         .binding(
                                                 defaults.stringList,
                                                 () -> config.stringList,
@@ -249,7 +235,7 @@ public class GuiTest {
                                         .initial("")
                                         .build())
                                 .group(ListOption.createBuilder(Integer.class)
-                                        .name(Component.literal("Slider List"))
+                                        .name(new TextComponent("Slider List"))
                                         .binding(
                                                 defaults.intList,
                                                 () -> config.intList,
@@ -260,20 +246,20 @@ public class GuiTest {
                                         .available(false)
                                         .build())
                                 .group(ListOption.createBuilder(Component.class)
-                                        .name(Component.literal("Useless Label List"))
-                                        .binding(Binding.immutable(List.of(Component.literal("It's quite impressive that literally every single controller works, without problem."))))
+                                        .name(new TextComponent("Useless Label List"))
+                                        .binding(Binding.immutable(List.of(new TextComponent("It's quite impressive that literally every single controller works, without problem."))))
                                         .controller(LabelController::new)
-                                        .initial(Component.literal("Initial label"))
+                                        .initial(new TextComponent("Initial label"))
                                         .build())
                                 .build())
                         .category(PlaceholderCategory.createBuilder()
-                                .name(Component.literal("Placeholder Category"))
+                                .name(new TextComponent("Placeholder Category"))
                                 .screen((client, yaclScreen) -> new RequireRestartScreen(yaclScreen))
                                 .build())
                         .category(ConfigCategory.createBuilder()
-                                .name(Component.literal("Group Test"))
+                                .name(new TextComponent("Group Test"))
                                 .option(Option.createBuilder(boolean.class)
-                                        .name(Component.literal("Root Test"))
+                                        .name(new TextComponent("Root Test"))
                                         .binding(
                                                 defaults.groupTestRoot,
                                                 () -> config.groupTestRoot,
@@ -282,9 +268,9 @@ public class GuiTest {
                                         .controller(TickBoxController::new)
                                         .build())
                                 .group(OptionGroup.createBuilder()
-                                        .name(Component.literal("First Group"))
+                                        .name(new TextComponent("First Group"))
                                         .option(Option.createBuilder(boolean.class)
-                                                .name(Component.literal("First Group Test 1"))
+                                                .name(new TextComponent("First Group Test 1"))
                                                 .binding(
                                                         defaults.groupTestFirstGroup,
                                                         () -> config.groupTestFirstGroup,
@@ -293,7 +279,7 @@ public class GuiTest {
                                                 .controller(TickBoxController::new)
                                                 .build())
                                         .option(Option.createBuilder(boolean.class)
-                                                .name(Component.literal("First Group Test 2"))
+                                                .name(new TextComponent("First Group Test 2"))
                                                 .binding(
                                                         defaults.groupTestFirstGroup2,
                                                         () -> config.groupTestFirstGroup2,
@@ -303,9 +289,9 @@ public class GuiTest {
                                                 .build())
                                         .build())
                                 .group(OptionGroup.createBuilder()
-                                        .name(Component.empty())
+                                        .name(TextComponent.EMPTY)
                                         .option(Option.createBuilder(boolean.class)
-                                                .name(Component.literal("Second Group Test"))
+                                                .name(new TextComponent("Second Group Test"))
                                                 .binding(
                                                         defaults.groupTestSecondGroup,
                                                         () -> config.groupTestSecondGroup,
@@ -316,9 +302,9 @@ public class GuiTest {
                                         .build())
                                 .build())
                         .category(ConfigCategory.createBuilder()
-                                .name(Component.literal("Scroll Test"))
+                                .name(new TextComponent("Scroll Test"))
                                 .option(Option.createBuilder(int.class)
-                                        .name(Component.literal("Int Slider that is cut off because the slider"))
+                                        .name(new TextComponent("Int Slider that is cut off because the slider"))
                                         .binding(
                                                 defaults.scrollingSlider,
                                                 () -> config.scrollingSlider,
@@ -327,107 +313,107 @@ public class GuiTest {
                                         .controller(opt -> new IntegerSliderController(opt, 0, 10, 1))
                                         .build())
                                 .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Option"))
+                                        .name(new TextComponent("Option"))
                                         .action((screen, opt) -> {
                                         })
                                         .controller(ActionController::new)
                                         .build())
                                 .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Option"))
+                                        .name(new TextComponent("Option"))
                                         .action((screen, opt) -> {
                                         })
                                         .controller(ActionController::new)
                                         .build())
                                 .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Option"))
+                                        .name(new TextComponent("Option"))
                                         .action((screen, opt) -> {
                                         })
                                         .controller(ActionController::new)
                                         .build())
                                 .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Option"))
+                                        .name(new TextComponent("Option"))
                                         .action((screen, opt) -> {
                                         })
                                         .controller(ActionController::new)
                                         .build())
                                 .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Option"))
+                                        .name(new TextComponent("Option"))
                                         .action((screen, opt) -> {
                                         })
                                         .controller(ActionController::new)
                                         .build())
                                 .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Option"))
+                                        .name(new TextComponent("Option"))
                                         .action((screen, opt) -> {
                                         })
                                         .controller(ActionController::new)
                                         .build())
                                 .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Option"))
+                                        .name(new TextComponent("Option"))
                                         .action((screen, opt) -> {
                                         })
                                         .controller(ActionController::new)
                                         .build())
                                 .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Option"))
+                                        .name(new TextComponent("Option"))
                                         .action((screen, opt) -> {
                                         })
                                         .controller(ActionController::new)
                                         .build())
                                 .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Option"))
+                                        .name(new TextComponent("Option"))
                                         .action((screen, opt) -> {
                                         })
                                         .controller(ActionController::new)
                                         .build())
                                 .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Option"))
+                                        .name(new TextComponent("Option"))
                                         .action((screen, opt) -> {
                                         })
                                         .controller(ActionController::new)
                                         .build())
                                 .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Option"))
+                                        .name(new TextComponent("Option"))
                                         .action((screen, opt) -> {
                                         })
                                         .controller(ActionController::new)
                                         .build())
                                 .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Option"))
+                                        .name(new TextComponent("Option"))
                                         .action((screen, opt) -> {
                                         })
                                         .controller(ActionController::new)
                                         .build())
                                 .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Option"))
+                                        .name(new TextComponent("Option"))
                                         .action((screen, opt) -> {
                                         })
                                         .controller(ActionController::new)
                                         .build())
                                 .build())
                         .category(ConfigCategory.createBuilder()
-                                .name(Component.literal("Category Test"))
+                                .name(new TextComponent("Category Test"))
                                 .build())
                         .category(ConfigCategory.createBuilder()
-                                .name(Component.literal("Category Test"))
+                                .name(new TextComponent("Category Test"))
                                 .build())
                         .category(ConfigCategory.createBuilder()
-                                .name(Component.literal("Category Test"))
+                                .name(new TextComponent("Category Test"))
                                 .build())
                         .category(ConfigCategory.createBuilder()
-                                .name(Component.literal("Category Test"))
+                                .name(new TextComponent("Category Test"))
                                 .build())
                         .category(ConfigCategory.createBuilder()
-                                .name(Component.literal("Category Test"))
+                                .name(new TextComponent("Category Test"))
                                 .build())
                         .category(ConfigCategory.createBuilder()
-                                .name(Component.literal("Category Test"))
+                                .name(new TextComponent("Category Test"))
                                 .build())
                         .category(ConfigCategory.createBuilder()
-                                .name(Component.literal("Category Test"))
+                                .name(new TextComponent("Category Test"))
                                 .build())
                         .category(ConfigCategory.createBuilder()
-                                .name(Component.literal("Category Test"))
+                                .name(new TextComponent("Category Test"))
                                 .build())
                         .save(() -> {
                             Minecraft.getInstance().options.save();
@@ -441,16 +427,16 @@ public class GuiTest {
 
     private static Screen getWikiGetStarted(Screen parent) {
         return YetAnotherConfigLib.createBuilder()
-                .title(Component.literal("Used for narration. Could be used to render a title in the future."))
+                .title(new TextComponent("Used for narration. Could be used to render a title in the future."))
                 .category(ConfigCategory.createBuilder()
-                        .name(Component.literal("Name of the category"))
-                        .tooltip(Component.literal("This Component will appear as a tooltip when you hover or focus the button with Tab. There is no need to add \n to wrap as YACL will do it for you."))
+                        .name(new TextComponent("Name of the category"))
+                        .tooltip(new TextComponent("This Component will appear as a tooltip when you hover or focus the button with Tab. There is no need to add \n to wrap as YACL will do it for you."))
                         .group(OptionGroup.createBuilder()
-                                .name(Component.literal("Name of the group"))
-                                .tooltip(Component.literal("This Component will appear when you hover over the name or focus on the collapse button with Tab."))
+                                .name(new TextComponent("Name of the group"))
+                                .tooltip(new TextComponent("This Component will appear when you hover over the name or focus on the collapse button with Tab."))
                                 .option(Option.createBuilder(boolean.class)
-                                        .name(Component.literal("Boolean Option"))
-                                        .tooltip(Component.literal("This Component will appear as a tooltip when you hover over the option."))
+                                        .name(new TextComponent("Boolean Option"))
+                                        .tooltip(new TextComponent("This Component will appear as a tooltip when you hover over the option."))
                                         .binding(true, () -> myBooleanOption, newVal -> myBooleanOption = newVal)
                                         .controller(TickBoxController::new)
                                         .build())

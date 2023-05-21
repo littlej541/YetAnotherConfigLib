@@ -100,7 +100,7 @@ public class SliderControllerElement extends ControllerWidget<ISliderController<
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (!focused)
+        if (!this.isFocused())
             return false;
 
         switch (keyCode) {
@@ -158,7 +158,7 @@ public class SliderControllerElement extends ControllerWidget<ISliderController<
 
     @Override
     public void postRender(PoseStack matrices, int mouseX, int mouseY, float delta) {
-        if (super.isMouseOver(mouseX, mouseY) || focused)
+        if (super.isMouseOver(mouseX, mouseY) || this.isFocused())
             super.postRender(matrices, mouseX, mouseY, delta);
     }
 }

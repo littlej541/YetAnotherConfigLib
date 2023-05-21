@@ -6,7 +6,7 @@ import dev.isxander.yacl.api.utils.Dimension;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -16,10 +16,11 @@ import net.minecraft.sounds.SoundEvents;
 
 import java.awt.*;
 
-public abstract class AbstractWidget implements GuiEventListener, Renderable, NarratableEntry {
+public abstract class AbstractWidget implements GuiEventListener, Widget, NarratableEntry {
     protected final Minecraft client = Minecraft.getInstance();
     protected final Font textRenderer = client.font;
     protected final int inactiveColor = 0xFFA0A0A0;
+    private boolean focused = false;
 
     private Dimension<Integer> dim;
 
@@ -54,8 +55,17 @@ public abstract class AbstractWidget implements GuiEventListener, Renderable, Na
         return NarrationPriority.NONE;
     }
 
-    public void unfocus() {
 
+    public boolean isFocused() {
+        return this.focused;
+    }
+
+    public void setFocused(boolean focused) {
+        this.focused = focused;
+    }
+
+    public void unfocus() {
+        this.focused = false;
     }
 
     public boolean matchesSearch(String query) {

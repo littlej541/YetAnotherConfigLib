@@ -7,8 +7,8 @@ import dev.isxander.yacl.api.Option;
 import dev.isxander.yacl.api.OptionFlag;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -145,7 +145,7 @@ public final class OptionImpl<T> implements Option<T> {
 
     @ApiStatus.Internal
     public static class BuilderImpl<T> implements Builder<T> {
-        private Component name = Component.literal("Name not specified!").withStyle(ChatFormatting.RED);
+        private Component name = new TextComponent("Name not specified!").withStyle(ChatFormatting.RED);
 
         private final List<Function<T, Component>> tooltipGetters = new ArrayList<>();
 
@@ -276,12 +276,12 @@ public final class OptionImpl<T> implements Option<T> {
             Validate.isTrue(!instant || flags.isEmpty(), "instant application does not support option flags");
 
             Function<T, Component> concatenatedTooltipGetter = value -> {
-                MutableComponent concatenatedTooltip = Component.empty();
+                MutableComponent concatenatedTooltip = TextComponent.EMPTY.plainCopy();
                 boolean first = true;
                 for (Function<T, Component> line : tooltipGetters) {
                     Component lineComponent = line.apply(value);
 
-                    if (lineComponent.getContents() == ComponentContents.EMPTY)
+                    if (lineComponent.getContents().equals(TextComponent.EMPTY.getContents()))
                         continue;
 
                     if (!first) concatenatedTooltip.append("\n");

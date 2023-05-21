@@ -13,8 +13,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.List;
 
 /**
@@ -63,10 +64,10 @@ public class ColorController implements IStringController<Color> {
 
     @Override
     public Component formatValue() {
-        MutableComponent text = Component.literal("#");
-        text.append(Component.literal(toHex(option().pendingValue().getRed())).withStyle(ChatFormatting.RED));
-        text.append(Component.literal(toHex(option().pendingValue().getGreen())).withStyle(ChatFormatting.GREEN));
-        text.append(Component.literal(toHex(option().pendingValue().getBlue())).withStyle(ChatFormatting.BLUE));
+        MutableComponent text = new TextComponent("#");
+        text.append(new TextComponent(toHex(option().pendingValue().getRed())).withStyle(ChatFormatting.RED));
+        text.append(new TextComponent(toHex(option().pendingValue().getGreen())).withStyle(ChatFormatting.GREEN));
+        text.append(new TextComponent(toHex(option().pendingValue().getBlue())).withStyle(ChatFormatting.BLUE));
         if (allowAlpha()) text.append(toHex(option().pendingValue().getAlpha()));
         return text;
     }

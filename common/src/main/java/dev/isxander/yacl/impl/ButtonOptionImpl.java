@@ -5,6 +5,7 @@ import dev.isxander.yacl.api.*;
 import dev.isxander.yacl.gui.YACLScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -203,7 +204,7 @@ public final class ButtonOptionImpl implements ButtonOption {
             Validate.notNull(controlGetter, "`control` must not be null when building `Option`");
             Validate.notNull(action, "`action` must not be null when building `Option`");
 
-            MutableComponent concatenatedTooltip = Component.empty();
+            MutableComponent concatenatedTooltip = TextComponent.EMPTY.plainCopy();
             boolean first = true;
             for (Component line : tooltipLines) {
                 if (!first) concatenatedTooltip.append("\n");

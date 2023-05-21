@@ -2,6 +2,7 @@ package dev.isxander.yacl.gui.controllers.slider;
 
 import dev.isxander.yacl.api.Option;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import org.apache.commons.lang3.Validate;
 
 import java.util.function.Function;
@@ -10,7 +11,7 @@ import java.util.function.Function;
  * {@link ISliderController} for longs.
  */
 public class LongSliderController implements ISliderController<Long> {
-    public static final Function<Long, Component> DEFAULT_FORMATTER = value -> Component.literal(String.format("%,d", value).replaceAll("[\u00a0\u202F]", " "));
+    public static final Function<Long, Component> DEFAULT_FORMATTER = value -> new TextComponent(String.format("%,d", value).replaceAll("[\u00a0\u202F]", " "));
 
     private final Option<Long> option;
 

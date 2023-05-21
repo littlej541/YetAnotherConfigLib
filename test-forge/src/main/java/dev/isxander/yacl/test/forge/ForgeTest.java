@@ -1,7 +1,7 @@
 package dev.isxander.yacl.test.forge;
 
 import dev.isxander.yacl.test.GuiTest;
-import net.minecraftforge.client.ConfigScreenHandler;
+import net.minecraftforge.client.ConfigGuiHandler;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 
@@ -9,8 +9,8 @@ import net.minecraftforge.fml.common.Mod;
 public class ForgeTest {
     public ForgeTest() {
         ModLoadingContext.get().registerExtensionPoint(
-                ConfigScreenHandler.ConfigScreenFactory.class,
-                () -> new ConfigScreenHandler.ConfigScreenFactory(
+                ConfigGuiHandler.ConfigGuiFactory.class,
+                () -> new ConfigGuiHandler.ConfigGuiFactory(
                         (minecraft, parent) -> GuiTest.getModConfigScreenFactory(parent)
                 )
         );

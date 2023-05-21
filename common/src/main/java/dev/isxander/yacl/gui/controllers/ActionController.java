@@ -7,6 +7,7 @@ import dev.isxander.yacl.api.utils.Dimension;
 import dev.isxander.yacl.gui.AbstractWidget;
 import dev.isxander.yacl.gui.YACLScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.function.BiConsumer;
 
@@ -15,7 +16,7 @@ import java.util.function.BiConsumer;
  * and renders a {@link} Text on the right.
  */
 public class ActionController implements Controller<BiConsumer<YACLScreen, ButtonOption>> {
-    public static final Component DEFAULT_TEXT = Component.translatable("yacl.control.action.execute");
+    public static final Component DEFAULT_TEXT = new TranslatableComponent("yacl.control.action.execute");
 
     private final ButtonOption option;
     private final Component text;
@@ -90,7 +91,7 @@ public class ActionController implements Controller<BiConsumer<YACLScreen, Butto
 
         @Override
         public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-            if (!focused) {
+            if (!this.isFocused()) {
                 return false;
             }
 

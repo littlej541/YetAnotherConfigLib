@@ -8,6 +8,8 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public class ElementListWidgetExt<E extends ElementListWidgetExt.Entry<E>> extends ContainerObjectSelectionList<E> {
     protected final int x, y;
 
@@ -123,7 +125,7 @@ public class ElementListWidgetExt<E extends ElementListWidgetExt.Entry<E>> exten
     }
 
     @Override
-    protected void renderList(PoseStack matrices, int mouseX, int mouseY, float delta) {
+    protected void renderList(PoseStack matrices, int x, int y, int mouseX, int mouseY, float delta) {
         int left = this.getRowLeft();
         int right = this.getRowWidth();
         int count = this.getItemCount();
@@ -134,7 +136,7 @@ public class ElementListWidgetExt<E extends ElementListWidgetExt.Entry<E>> exten
             int bottom = top + entry.getItemHeight();
             int entryHeight = entry.getItemHeight() - 4;
             if (bottom >= this.y0 && top <= this.y1) {
-                this.renderItem(matrices, mouseX, mouseY, delta, i, left, top, right, entryHeight);
+                entry.render(matrices, i, top, left, right, entryHeight, mouseX, mouseY, Objects.equals(this.getHovered(), entry), delta);
             }
         }
     }

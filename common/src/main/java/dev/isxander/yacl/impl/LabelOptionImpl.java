@@ -5,6 +5,7 @@ import dev.isxander.yacl.api.*;
 import dev.isxander.yacl.gui.controllers.LabelController;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -18,8 +19,8 @@ import java.util.function.BiConsumer;
 @ApiStatus.Internal
 public final class LabelOptionImpl implements LabelOption {
     private final Component label;
-    private final Component name = Component.literal("Label Option");
-    private final Component tooltip = Component.empty();
+    private final Component name = new TextComponent("Label Option");
+    private final Component tooltip = TextComponent.EMPTY;
     private final LabelController labelController;
     private final Binding<Component> binding;
 
@@ -139,7 +140,7 @@ public final class LabelOptionImpl implements LabelOption {
 
         @Override
         public LabelOption build() {
-            MutableComponent text = Component.empty();
+            MutableComponent text = TextComponent.EMPTY.plainCopy();
             Iterator<Component> iterator = lines.iterator();
             while (iterator.hasNext()) {
                 text.append(iterator.next());

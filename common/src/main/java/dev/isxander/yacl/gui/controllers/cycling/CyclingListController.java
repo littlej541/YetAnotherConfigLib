@@ -3,6 +3,7 @@ package dev.isxander.yacl.gui.controllers.cycling;
 import com.google.common.collect.ImmutableList;
 import dev.isxander.yacl.api.Option;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 import java.util.function.Function;
 
@@ -22,7 +23,7 @@ public class CyclingListController<T> implements ICyclingController<T> {
      * @param values the values to cycle through
      */
     public CyclingListController(Option<T> option, Iterable<T> values) {
-        this(option, values, value -> Component.literal(value.toString()));
+        this(option, values, value -> new TextComponent(value.toString()));
     }
 
     /**

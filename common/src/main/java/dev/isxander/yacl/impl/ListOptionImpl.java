@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import dev.isxander.yacl.api.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -212,7 +213,7 @@ public final class ListOptionImpl<T> implements ListOption<T> {
 
     @ApiStatus.Internal
     public static final class BuilderImpl<T> implements Builder<T> {
-        private Component name = Component.empty();
+        private Component name = TextComponent.EMPTY;
         private final List<Component> tooltipLines = new ArrayList<>();
         private Function<ListOptionEntry<T>, Controller<T>> controllerFunction;
         private Binding<List<T>> binding = null;
@@ -323,7 +324,7 @@ public final class ListOptionImpl<T> implements ListOption<T> {
             Validate.notNull(binding, "`binding` must not be null");
             Validate.notNull(initialValue, "`initialValue` must not be null");
 
-            MutableComponent concatenatedTooltip = Component.empty();
+            MutableComponent concatenatedTooltip = TextComponent.EMPTY.plainCopy();
             boolean first = true;
             for (Component line : tooltipLines) {
                 if (!first) concatenatedTooltip.append("\n");

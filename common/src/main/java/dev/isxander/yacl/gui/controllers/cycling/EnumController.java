@@ -3,7 +3,7 @@ package dev.isxander.yacl.gui.controllers.cycling;
 import dev.isxander.yacl.api.NameableEnum;
 import dev.isxander.yacl.api.Option;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.OptionEnum;
+import net.minecraft.network.chat.TextComponent;
 
 import java.util.Arrays;
 import java.util.function.Function;
@@ -20,16 +20,14 @@ public class EnumController<T extends Enum<T>> extends CyclingListController<T> 
         return value -> {
             if (value instanceof NameableEnum nameableEnum)
                 return nameableEnum.getDisplayName();
-            if (value instanceof OptionEnum translatableOption)
-                return translatableOption.getCaption();
-            return Component.literal(value.toString());
+            return new TextComponent(value.toString());
         };
     }
 
     /**
      * Constructs a cycling enum controller with a default value formatter and all values being available.
      * The default value formatter first searches if the
-     * enum is a {@link NameableEnum} or {@link OptionEnum} else, just uses {@link Enum#toString()}
+     * enum is a {@link NameableEnum} else, just uses {@link Enum#toString()}
      *
      * @param option bound option
      */

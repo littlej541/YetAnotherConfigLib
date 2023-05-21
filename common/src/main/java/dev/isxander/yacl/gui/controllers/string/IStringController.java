@@ -6,6 +6,7 @@ import dev.isxander.yacl.api.utils.Dimension;
 import dev.isxander.yacl.gui.AbstractWidget;
 import dev.isxander.yacl.gui.YACLScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 /**
  * A controller that can be any type but can input and output a string.
@@ -30,7 +31,7 @@ public interface IStringController<T> extends Controller<T> {
      */
     @Override
     default Component formatValue() {
-        return Component.literal(getString());
+        return new TextComponent(getString());
     }
 
     default boolean isInputValid(String input) {

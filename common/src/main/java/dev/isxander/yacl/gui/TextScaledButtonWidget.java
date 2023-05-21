@@ -24,7 +24,7 @@ public class TextScaledButtonWidget extends TooltipButtonWidget {
         Font font = Minecraft.getInstance().font;
 
         matrices.pushPose();
-        matrices.translate(((this.getX() + this.width / 2f) - font.width(getMessage()) * textScale / 2), (float)this.getY() + (this.height - 8 * textScale) / 2f / textScale, 0);
+        matrices.translate(((this.x + this.width / 2f) - font.width(getMessage()) * textScale / 2), (float)this.y + (this.height - 8 * textScale) / 2f / textScale, 0);
         matrices.scale(textScale, textScale, 1);
         font.drawShadow(matrices, getMessage(), 0, 0, color | Mth.ceil(this.alpha * 255.0F) << 24);
         matrices.popPose();

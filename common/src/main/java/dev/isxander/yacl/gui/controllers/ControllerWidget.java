@@ -7,21 +7,18 @@ import dev.isxander.yacl.gui.AbstractWidget;
 import dev.isxander.yacl.gui.YACLScreen;
 import dev.isxander.yacl.gui.utils.GuiUtils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.MultiLineLabel;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.network.chat.TextComponent;
 
 public abstract class ControllerWidget<T extends Controller<?>> extends AbstractWidget {
     protected final T control;
     protected MultiLineLabel wrappedTooltip;
     protected final YACLScreen screen;
 
-    protected boolean focused = false;
     protected boolean hovered = false;
 
     protected final Component modifiedOptionName;
@@ -42,7 +39,7 @@ public abstract class ControllerWidget<T extends Controller<?>> extends Abstract
         hovered = isMouseOver(mouseX, mouseY);
 
         Component name = control.option().changed() ? modifiedOptionName : control.option().name();
-        Component shortenedName = Component.literal(GuiUtils.shortenString(name.getString(), textRenderer, getDimension().width() - getControlWidth() - getXPadding() - 7, "...")).setStyle(name.getStyle());
+        Component shortenedName = new TextComponent(GuiUtils.shortenString(name.getString(), textRenderer, getDimension().width() - getControlWidth() - getXPadding() - 7, "...")).setStyle(name.getStyle());
 
         drawButtonRect(matrices, getDimension().x(), getDimension().y(), getDimension().xLimit(), getDimension().yLimit(), isHovered(), isAvailable());
         matrices.pushPose();
@@ -58,7 +55,7 @@ public abstract class ControllerWidget<T extends Controller<?>> extends Abstract
 
     @Override
     public void postRender(PoseStack matrices, int mouseX, int mouseY, float delta) {
-        if (hovered || focused) {
+        if (hovered || this.isFocused()) {
             YACLScreen.renderMultilineTooltip(matrices, textRenderer, wrappedTooltip, getDimension().centerX(), getDimension().y() - 5, getDimension().yLimit() + 5, screen.width, screen.height);
         }
     }
@@ -84,7 +81,7 @@ public abstract class ControllerWidget<T extends Controller<?>> extends Abstract
     }
 
     public boolean isHovered() {
-        return isAvailable() && (hovered || focused);
+        return isAvailable() && (hovered || this.isFocused());
     }
 
     protected abstract int getHoveredControlWidth();
@@ -129,27 +126,14 @@ public abstract class ControllerWidget<T extends Controller<?>> extends Abstract
         return getDimension().y() + getDimension().height() / 2f - textRenderer.lineHeight / 2f;
     }
 
-    @Nullable
     @Override
-    public ComponentPath nextFocusPath(FocusNavigationEvent focusNavigationEvent) {
-        if (!this.isAvailable())
-            return null;
-        return !this.isFocused() ? ComponentPath.leaf(this) : null;
-    }
+    public boolean changeFocus(boolean lookForwards) {
+        if (this.isAvailable()) {
+            this.setFocused(!this.isFocused());
+            return this.isFocused();
+        }
 
-    @Override
-    public boolean isFocused() {
-        return focused;
-    }
-
-    @Override
-    public void setFocused(boolean focused) {
-        this.focused = focused;
-    }
-
-    @Override
-    public void unfocus() {
-        this.focused = false;
+        return false;
     }
 
     @Override
@@ -159,7 +143,7 @@ public abstract class ControllerWidget<T extends Controller<?>> extends Abstract
 
     @Override
     public NarrationPriority narrationPriority() {
-        return focused ? NarrationPriority.FOCUSED : isHovered() ? NarrationPriority.HOVERED : NarrationPriority.NONE;
+        return this.isFocused() ? NarrationPriority.FOCUSED : isHovered() ? NarrationPriority.HOVERED : NarrationPriority.NONE;
     }
 
     @Override

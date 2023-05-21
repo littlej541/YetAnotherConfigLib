@@ -6,18 +6,15 @@ import dev.isxander.yacl.api.Option;
 import dev.isxander.yacl.api.utils.Dimension;
 import dev.isxander.yacl.gui.AbstractWidget;
 import dev.isxander.yacl.gui.YACLScreen;
-import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.MultiLineLabel;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -56,7 +53,6 @@ public class LabelController implements Controller<Component> {
     public class LabelControllerElement extends AbstractWidget {
         private List<FormattedCharSequence> wrappedText;
         protected MultiLineLabel wrappedTooltip;
-        protected boolean focused;
 
         protected final YACLScreen screen;
 
@@ -78,7 +74,7 @@ public class LabelController implements Controller<Component> {
                 y += textRenderer.lineHeight;
             }
 
-            if (isFocused()) {
+            if (this.isFocused()) {
                 GuiComponent.fill(matrices, getDimension().x() - 1, getDimension().y() - 1, getDimension().xLimit() + 1, getDimension().y(), -1);
                 GuiComponent.fill(matrices, getDimension().x() - 1, getDimension().y() - 1, getDimension().x(), getDimension().yLimit() + 1, -1);
                 GuiComponent.fill(matrices, getDimension().x() - 1, getDimension().yLimit(), getDimension().xLimit() + 1, getDimension().yLimit() + 1, -1);
@@ -162,22 +158,14 @@ public class LabelController implements Controller<Component> {
             return formatValue().getString().toLowerCase().contains(query.toLowerCase());
         }
 
-        @Nullable
         @Override
-        public ComponentPath nextFocusPath(FocusNavigationEvent focusNavigationEvent) {
-            if (!option().available())
-                return null;
-            return !this.isFocused() ? ComponentPath.leaf(this) : null;
-        }
+        public boolean changeFocus(boolean lookForwards) {
+            if (option().available()) {
+                this.setFocused(!this.isFocused());
+                return this.isFocused();
+            }
 
-        @Override
-        public boolean isFocused() {
-            return focused;
-        }
-
-        @Override
-        public void setFocused(boolean focused) {
-            this.focused = focused;
+            return false;
         }
 
         @Override

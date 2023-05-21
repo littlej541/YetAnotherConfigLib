@@ -6,6 +6,7 @@ import dev.isxander.yacl.gui.AbstractWidget;
 import dev.isxander.yacl.gui.YACLScreen;
 import dev.isxander.yacl.gui.controllers.ListEntryWidget;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,12 +31,12 @@ public final class ListOptionEntryImpl<T> implements ListOptionEntry<T> {
 
     @Override
     public @NotNull Component name() {
-        return Component.empty();
+        return TextComponent.EMPTY;
     }
 
     @Override
     public @NotNull Component tooltip() {
-        return Component.empty();
+        return TextComponent.EMPTY;
     }
 
     @Override

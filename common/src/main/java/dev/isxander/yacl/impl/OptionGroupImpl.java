@@ -5,8 +5,8 @@ import dev.isxander.yacl.api.ListOption;
 import dev.isxander.yacl.api.Option;
 import dev.isxander.yacl.api.OptionGroup;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +58,7 @@ public final class OptionGroupImpl implements OptionGroup {
 
     @ApiStatus.Internal
     public static final class BuilderImpl implements Builder {
-        private Component name = Component.empty();
+        private Component name = TextComponent.EMPTY;
         private final List<Component> tooltipLines = new ArrayList<>();
         private final List<Option<?>> options = new ArrayList<>();
         private boolean collapsed = false;
@@ -111,10 +111,10 @@ public final class OptionGroupImpl implements OptionGroup {
         public OptionGroup build() {
             Validate.notEmpty(options, "`options` must not be empty to build `OptionGroup`");
 
-            MutableComponent concatenatedTooltip = Component.empty();
+            MutableComponent concatenatedTooltip =TextComponent.EMPTY.plainCopy();
             boolean first = true;
             for (Component line : tooltipLines) {
-                if (line.getContents() == ComponentContents.EMPTY)
+                if (line.getContents().equals(TextComponent.EMPTY.getContents()))
                     continue;
 
                 if (!first) concatenatedTooltip.append("\n");

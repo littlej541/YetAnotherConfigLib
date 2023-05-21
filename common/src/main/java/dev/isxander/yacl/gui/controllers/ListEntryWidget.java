@@ -11,7 +11,8 @@ import dev.isxander.yacl.gui.YACLScreen;
 import net.minecraft.client.gui.components.events.ContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -38,12 +39,12 @@ public class ListEntryWidget extends AbstractWidget implements ContainerEventHan
         Dimension<Integer> dim = entryWidget.getDimension();
         entryWidget.setDimension(dim.clone().move(20 * 2, 0).expand(-20 * 3, 0));
 
-        removeButton = new TooltipButtonWidget(screen, dim.xLimit() - 20, dim.y(), 20, 20, Component.literal("\u274c"), Component.translatable("yacl.list.remove"), btn -> {
+        removeButton = new TooltipButtonWidget(screen, dim.xLimit() - 20, dim.y(), 20, 20, new TextComponent("\u274c"), new TranslatableComponent("yacl.list.remove"), btn -> {
             listOption.removeEntry(listOptionEntry);
             updateButtonStates();
         });
 
-        moveUpButton = new TooltipButtonWidget(screen, dim.x(), dim.y(), 20, 20, Component.literal("\u2191"), Component.translatable("yacl.list.move_up"), btn -> {
+        moveUpButton = new TooltipButtonWidget(screen, dim.x(), dim.y(), 20, 20, new TextComponent("\u2191"), new TranslatableComponent("yacl.list.move_up"), btn -> {
             int index = listOption.indexOf(listOptionEntry) - 1;
             if (index >= 0) {
                 listOption.removeEntry(listOptionEntry);
@@ -52,7 +53,7 @@ public class ListEntryWidget extends AbstractWidget implements ContainerEventHan
             }
         });
 
-        moveDownButton = new TooltipButtonWidget(screen, dim.x() + 20, dim.y(), 20, 20, Component.literal("\u2193"), Component.translatable("yacl.list.move_down"), btn -> {
+        moveDownButton = new TooltipButtonWidget(screen, dim.x() + 20, dim.y(), 20, 20, new TextComponent("\u2193"), new TranslatableComponent("yacl.list.move_down"), btn -> {
             int index = listOption.indexOf(listOptionEntry) + 1;
             if (index < listOption.options().size()) {
                 listOption.removeEntry(listOptionEntry);
@@ -68,9 +69,9 @@ public class ListEntryWidget extends AbstractWidget implements ContainerEventHan
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         updateButtonStates(); // update every render in case option becomes available/unavailable
 
-        removeButton.setY(getDimension().y());
-        moveUpButton.setY(getDimension().y());
-        moveDownButton.setY(getDimension().y());
+        removeButton.y = getDimension().y();
+        moveUpButton.y = getDimension().y();
+        moveDownButton.y = getDimension().y();
         entryWidget.setDimension(entryWidget.getDimension().withY(getDimension().y()));
 
         removeButton.render(matrices, mouseX, mouseY, delta);

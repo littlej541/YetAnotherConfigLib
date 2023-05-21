@@ -2,6 +2,7 @@ package dev.isxander.yacl.gui.controllers.slider;
 
 import dev.isxander.yacl.api.Option;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import org.apache.commons.lang3.Validate;
 
 import java.util.function.Function;
@@ -13,7 +14,7 @@ public class DoubleSliderController implements ISliderController<Double> {
     /**
      * Formats doubles to two decimal places
      */
-    public static final Function<Double, Component> DEFAULT_FORMATTER = value -> Component.literal(String.format("%,.2f", value).replaceAll("[\u00a0\u202F]", " "));
+    public static final Function<Double, Component> DEFAULT_FORMATTER = value -> new TextComponent(String.format("%,.2f", value).replaceAll("[\u00a0\u202F]", " "));
 
     private final Option<Double> option;
 

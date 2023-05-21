@@ -2,6 +2,7 @@ package dev.isxander.yacl.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
 import dev.isxander.yacl.api.Option;
 import dev.isxander.yacl.api.OptionFlag;
 import dev.isxander.yacl.api.PlaceholderCategory;
@@ -11,17 +12,18 @@ import dev.isxander.yacl.api.utils.MutableDimension;
 import dev.isxander.yacl.api.utils.OptionUtils;
 import dev.isxander.yacl.gui.utils.GuiUtils;
 import dev.isxander.yacl.impl.utils.YACLConstants;
+import dev.isxander.yacl.mixin.MultiLineLabelWidthInterface;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.MultiLineLabel;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import org.joml.Matrix4f;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -63,8 +65,8 @@ public class YACLScreen extends Screen {
                 actionDim.y(),
                 actionDim.width(),
                 actionDim.height(),
-                Component.empty(),
-                Component.empty(),
+                TextComponent.EMPTY,
+                TextComponent.EMPTY,
                 btn -> finishOrSave()
         );
         actionDim.expand(-actionDim.width() / 2 - 2, 0).move(-actionDim.width() / 2 - 2, -22);
@@ -74,8 +76,8 @@ public class YACLScreen extends Screen {
                 actionDim.y(),
                 actionDim.width(),
                 actionDim.height(),
-                Component.empty(),
-                Component.empty(),
+                TextComponent.EMPTY,
+                TextComponent.EMPTY,
                 btn -> cancelOrReset()
         );
         actionDim.move(actionDim.width() + 4, 0);
@@ -85,8 +87,8 @@ public class YACLScreen extends Screen {
                 actionDim.y(),
                 actionDim.width(),
                 actionDim.height(),
-                Component.translatable("yacl.gui.undo"),
-                Component.translatable("yacl.gui.undo.tooltip"),
+                new TranslatableComponent("yacl.gui.undo"),
+                new TranslatableComponent("yacl.gui.undo.tooltip"),
                 btn -> undo()
         );
 
@@ -94,10 +96,10 @@ public class YACLScreen extends Screen {
                 this,
                 font,
                 width / 3 / 2 - paddedWidth / 2 + 1,
-                undoButton.getY() - 22,
+                undoButton.y - 22,
                 paddedWidth - 2, 18,
-                Component.translatable("gui.recipebook.search_hint"),
-                Component.translatable("gui.recipebook.search_hint")
+                new TranslatableComponent("gui.recipebook.search_hint"),
+                new TranslatableComponent("gui.recipebook.search_hint")
         );
 
         categoryList = new CategoryListWidget(minecraft, this, width, height);
@@ -209,10 +211,10 @@ public class YACLScreen extends Screen {
         boolean pendingChanges = pendingChanges();
 
         undoButton.active = pendingChanges;
-        finishedSaveButton.setMessage(pendingChanges ? Component.translatable("yacl.gui.save") : GuiUtils.translatableFallback("yacl.gui.done", CommonComponents.GUI_DONE));
-        finishedSaveButton.setTooltip(pendingChanges ? Component.translatable("yacl.gui.save.tooltip") : Component.translatable("yacl.gui.finished.tooltip"));
-        cancelResetButton.setMessage(pendingChanges ? GuiUtils.translatableFallback("yacl.gui.cancel", CommonComponents.GUI_CANCEL) : Component.translatable("controls.reset"));
-        cancelResetButton.setTooltip(pendingChanges ? Component.translatable("yacl.gui.cancel.tooltip") : Component.translatable("yacl.gui.reset.tooltip"));
+        finishedSaveButton.setMessage(pendingChanges ? new TranslatableComponent("yacl.gui.save") : GuiUtils.translatableFallback("yacl.gui.done", CommonComponents.GUI_DONE));
+        finishedSaveButton.setTooltip(pendingChanges ? new TranslatableComponent("yacl.gui.save.tooltip") : new TranslatableComponent("yacl.gui.finished.tooltip"));
+        cancelResetButton.setMessage(pendingChanges ? GuiUtils.translatableFallback("yacl.gui.cancel", CommonComponents.GUI_CANCEL) : new TranslatableComponent("controls.reset"));
+        cancelResetButton.setTooltip(pendingChanges ? new TranslatableComponent("yacl.gui.cancel.tooltip") : new TranslatableComponent("yacl.gui.reset.tooltip"));
     }
 
     @Override
@@ -258,7 +260,7 @@ public class YACLScreen extends Screen {
     @Override
     public boolean shouldCloseOnEsc() {
         if (pendingChanges()) {
-            setSaveButtonMessage(Component.translatable("yacl.gui.save_before_exit").withStyle(ChatFormatting.RED), Component.translatable("yacl.gui.save_before_exit.tooltip"));
+            setSaveButtonMessage(new TranslatableComponent("yacl.gui.save_before_exit").withStyle(ChatFormatting.RED), new TranslatableComponent("yacl.gui.save_before_exit.tooltip"));
             return false;
         }
         return true;
@@ -271,7 +273,7 @@ public class YACLScreen extends Screen {
 
     public static void renderMultilineTooltip(PoseStack matrices, Font font, MultiLineLabel text, int centerX, int yAbove, int yBelow, int screenWidth, int screenHeight) {
         if (text.getLineCount() > 0) {
-            int maxWidth = text.getWidth();
+            int maxWidth = ((MultiLineLabelWidthInterface )text).getWidth();
             int lineHeight = font.lineHeight + 1;
             int height = text.getLineCount() * lineHeight - 1;
 
@@ -283,7 +285,7 @@ public class YACLScreen extends Screen {
             if (minAbove < 8)
                 y = maxBelow > minAbove ? belowY : aboveY;
 
-            int x = Math.max(centerX - text.getWidth() / 2 - 12, -6);
+            int x = Math.max(centerX - ((MultiLineLabelWidthInterface )text).getWidth() / 2 - 12, -6);
 
             int drawX = x + 12;
             int drawY = y - 12;
@@ -294,7 +296,7 @@ public class YACLScreen extends Screen {
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
             Matrix4f matrix4f = matrices.last().pose();
-            TooltipRenderUtil.renderTooltipBackground(
+            GuiUtils.renderTooltipBackground(
                     GuiComponent::fillGradient,
                     matrix4f,
                     bufferBuilder,
@@ -307,7 +309,8 @@ public class YACLScreen extends Screen {
             RenderSystem.enableDepthTest();
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
-            BufferUploader.drawWithShader(bufferBuilder.end());
+            bufferBuilder.end();
+            BufferUploader.end(bufferBuilder);
             RenderSystem.disableBlend();
             matrices.translate(0.0, 0.0, 400.0);
 

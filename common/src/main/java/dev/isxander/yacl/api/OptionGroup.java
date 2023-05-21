@@ -49,7 +49,7 @@ public interface OptionGroup {
 
     interface Builder extends OptionAddable {
         /**
-         * Sets name of the group, can be {@link Component#empty()} to just separate options, like sodium.
+         * Sets name of the group, can be {@link net.minecraft.network.chat.TextComponent#EMPTY} to just separate options, like sodium.
          *
          * @see OptionGroup#name()
          */

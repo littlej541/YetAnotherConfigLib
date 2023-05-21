@@ -35,7 +35,7 @@ public class CyclingControllerElement extends ControllerWidget<ICyclingControlle
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (!focused)
+        if (!this.isFocused())
             return false;
 
         switch (keyCode) {

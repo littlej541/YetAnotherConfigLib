@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -84,7 +85,7 @@ public final class PlaceholderCategoryImpl implements PlaceholderCategory {
         public PlaceholderCategory build() {
             Validate.notNull(name, "`name` must not be null to build `ConfigCategory`");
 
-            MutableComponent concatenatedTooltip = Component.empty();
+            MutableComponent concatenatedTooltip = TextComponent.EMPTY.plainCopy();
             boolean first = true;
             for (Component line : tooltipLines) {
                 if (!first) concatenatedTooltip.append("\n");

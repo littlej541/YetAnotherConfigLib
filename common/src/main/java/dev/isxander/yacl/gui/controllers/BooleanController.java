@@ -10,6 +10,7 @@ import dev.isxander.yacl.gui.YACLScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.function.Function;
 
@@ -25,8 +26,8 @@ public class BooleanController implements Controller<Boolean> {
 
     public static final Function<Boolean, Component> TRUE_FALSE_FORMATTER = (state) ->
             state
-                    ? Component.translatable("yacl.control.boolean.true")
-                    : Component.translatable("yacl.control.boolean.false");
+                    ? new TranslatableComponent("yacl.control.boolean.true")
+                    : new TranslatableComponent("yacl.control.boolean.false");
 
     public static final Function<Boolean, Component> YES_NO_FORMATTER = (state) ->
             state
@@ -142,7 +143,7 @@ public class BooleanController implements Controller<Boolean> {
 
         @Override
         public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-            if (!isFocused()) {
+            if (!this.isFocused()) {
                 return false;
             }
 

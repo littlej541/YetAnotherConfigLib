@@ -11,6 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 import java.util.function.Consumer;
 
@@ -36,7 +37,7 @@ public class StringControllerElement extends ControllerWidget<IStringController<
         inputField = control.getString();
         inputFieldFocused = false;
         selectionLength = 0;
-        emptyText = Component.literal("Click to type...").withStyle(ChatFormatting.GRAY);
+        emptyText = new TextComponent("Click to type...").withStyle(ChatFormatting.GRAY);
         control.option().addListener((opt, val) -> inputField = control.getString());
         setDimension(dim);
     }
@@ -49,7 +50,7 @@ public class StringControllerElement extends ControllerWidget<IStringController<
     @Override
     protected void drawValueText(PoseStack matrices, int mouseX, int mouseY, float delta) {
         Component valueText = getValueText();
-        if (!isHovered()) valueText = Component.literal(GuiUtils.shortenString(valueText.getString(), textRenderer, getMaxUnwrapLength(), "...")).setStyle(valueText.getStyle());
+        if (!isHovered()) valueText = new TextComponent(GuiUtils.shortenString(valueText.getString(), textRenderer, getMaxUnwrapLength(), "...")).setStyle(valueText.getStyle());
 
         matrices.pushPose();
         int textX = getDimension().xLimit() - textRenderer.width(valueText) + renderOffset - getXPadding();
@@ -66,7 +67,7 @@ public class StringControllerElement extends ControllerWidget<IStringController<
             GuiComponent.fill(matrices, inputFieldBounds.x(), inputFieldBounds.yLimit(), inputFieldBounds.xLimit(), inputFieldBounds.yLimit() + 1, -1);
             GuiComponent.fill(matrices, inputFieldBounds.x() + 1, inputFieldBounds.yLimit() + 1, inputFieldBounds.xLimit() + 1, inputFieldBounds.yLimit() + 2, 0xFF404040);
 
-            if (inputFieldFocused || focused) {
+            if (inputFieldFocused || this.isFocused()) {
                 if (caretPos > text.length())
                     caretPos = text.length();
 
@@ -403,6 +404,6 @@ public class StringControllerElement extends ControllerWidget<IStringController<
         if (!inputFieldFocused && inputField.isEmpty())
             return emptyText;
 
-        return instantApply || !inputFieldFocused ? control.formatValue() : Component.literal(inputField);
+        return instantApply || !inputFieldFocused ? control.formatValue() : new TextComponent(inputField);
     }
 }

@@ -7,8 +7,8 @@ import dev.isxander.yacl.api.Option;
 import dev.isxander.yacl.api.OptionGroup;
 import dev.isxander.yacl.impl.utils.YACLConstants;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -114,15 +114,15 @@ public final class ConfigCategoryImpl implements ConfigCategory {
             Validate.notNull(name, "`name` must not be null to build `ConfigCategory`");
 
             List<OptionGroup> combinedGroups = new ArrayList<>();
-            combinedGroups.add(new OptionGroupImpl(Component.empty(), Component.empty(), ImmutableList.copyOf(rootOptions), false, true));
+            combinedGroups.add(new OptionGroupImpl(TextComponent.EMPTY, TextComponent.EMPTY, ImmutableList.copyOf(rootOptions), false, true));
             combinedGroups.addAll(groups);
 
             Validate.notEmpty(combinedGroups, "at least one option must be added to build `ConfigCategory`");
 
-            MutableComponent concatenatedTooltip = Component.empty();
+            MutableComponent concatenatedTooltip = TextComponent.EMPTY.plainCopy();
             boolean first = true;
             for (Component line : tooltipLines) {
-                if (line.getContents() == ComponentContents.EMPTY)
+                if (line.getContents().equals(TextComponent.EMPTY.getContents()))
                     continue;
 
                 if (!first) concatenatedTooltip.append("\n");

@@ -19,7 +19,7 @@ public class CategoryWidget extends TooltipButtonWidget {
     }
 
     @Override
-    protected int getTextureY() {
+    protected int getYImage(boolean hovered) {
         int i = 1;
         if (!this.active) {
             i = 0;

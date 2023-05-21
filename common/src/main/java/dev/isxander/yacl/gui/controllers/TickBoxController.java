@@ -9,6 +9,7 @@ import dev.isxander.yacl.gui.AbstractWidget;
 import dev.isxander.yacl.gui.YACLScreen;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 /**
  * This controller renders a tickbox
@@ -38,7 +39,7 @@ public class TickBoxController implements Controller<Boolean> {
      */
     @Override
     public Component formatValue() {
-        return Component.empty();
+        return TextComponent.EMPTY;
     }
 
     /**
@@ -105,7 +106,7 @@ public class TickBoxController implements Controller<Boolean> {
 
         @Override
         public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-            if (!focused) {
+            if (!this.isFocused()) {
                 return false;
             }
 

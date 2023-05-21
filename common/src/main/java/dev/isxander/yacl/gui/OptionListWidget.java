@@ -14,7 +14,8 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -225,10 +226,11 @@ public class OptionListWidget extends ElementListWidgetExt<OptionListWidget.Entr
         setScrollAmount(getMaxScroll() - d);
     }
 
-    @Override
     public boolean removeEntryFromTop(Entry entry) {
-        boolean ret = super.removeEntryFromTop(entry);
-        recacheViewableChildren();
+        double d = (double)this.getMaxScroll() - this.getScrollAmount();
+        boolean ret = removeEntry(entry);
+        setScrollAmount(getMaxScroll() - d);
+
         return ret;
     }
 
@@ -273,7 +275,7 @@ public class OptionListWidget extends ElementListWidgetExt<OptionListWidget.Entr
             this.groupName = group.name().getString().toLowerCase();
             if (option.canResetToDefault() && this.widget.canReset()) {
                 this.widget.setDimension(this.widget.getDimension().expanded(-20, 0));
-                this.resetButton = new TextScaledButtonWidget(yaclScreen, widget.getDimension().xLimit(), -50, 20, 20, 2f, Component.literal("\u21BB"), button -> {
+                this.resetButton = new TextScaledButtonWidget(yaclScreen, widget.getDimension().xLimit(), -50, 20, 20, 2f, new TextComponent("\u21BB"), button -> {
                     option.requestSetDefault();
                 });
                 option.addListener((opt, val) -> this.resetButton.active = !opt.isPendingValueDefault() && opt.available());
@@ -290,7 +292,7 @@ public class OptionListWidget extends ElementListWidgetExt<OptionListWidget.Entr
             widget.render(matrices, mouseX, mouseY, tickDelta);
 
             if (resetButton != null) {
-                resetButton.setY(y);
+                resetButton.y = y;
                 resetButton.render(matrices, mouseX, mouseY, tickDelta);
             }
         }
@@ -330,8 +332,12 @@ public class OptionListWidget extends ElementListWidgetExt<OptionListWidget.Entr
             return Math.max(widget.getDimension().height(), resetButton != null ? resetButton.getHeight() : 0) + 2;
         }
 
-        @Override
         public void setFocused(boolean focused) {
+            this.setFocused(focused ? this : null);
+        }
+
+        @Override
+        public void setFocused(GuiEventListener focused) {
             super.setFocused(focused);
         }
 
@@ -374,7 +380,7 @@ public class OptionListWidget extends ElementListWidgetExt<OptionListWidget.Entr
             this.wrappedName = MultiLineLabel.create(font, group.name(), getRowWidth() - 45);
             this.wrappedTooltip = MultiLineLabel.create(font, group.tooltip(), screen.width / 3 * 2 - 10);
             this.groupExpanded = !group.collapsed();
-            this.expandMinimizeButton = new LowProfileButtonWidget(0, 0, 20, 20, Component.empty(), btn -> onExpandButtonPress());
+            this.expandMinimizeButton = new LowProfileButtonWidget(0, 0, 20, 20, TextComponent.EMPTY, btn -> onExpandButtonPress());
             updateExpandMinimizeText();
         }
 
@@ -384,8 +390,8 @@ public class OptionListWidget extends ElementListWidgetExt<OptionListWidget.Entr
 
             int buttonY = y + entryHeight / 2 - expandMinimizeButton.getHeight() / 2 + 1;
 
-            expandMinimizeButton.setY(buttonY);
-            expandMinimizeButton.setX(x);
+            expandMinimizeButton.y = buttonY;
+            expandMinimizeButton.x = x;
             expandMinimizeButton.render(matrices, mouseX, mouseY, tickDelta);
 
             wrappedName.renderCentered(matrices, x + entryWidth / 2, y + getYPadding());
@@ -416,7 +422,7 @@ public class OptionListWidget extends ElementListWidgetExt<OptionListWidget.Entr
         }
 
         protected void updateExpandMinimizeText() {
-            expandMinimizeButton.setMessage(Component.literal(isExpanded() ? "▼" : "▶"));
+            expandMinimizeButton.setMessage(new TextComponent(isExpanded() ? "▼" : "▶"));
         }
 
         public void setChildEntries(List<? extends Entry> childEntries) {
@@ -469,13 +475,13 @@ public class OptionListWidget extends ElementListWidgetExt<OptionListWidget.Entr
             super(group, screen);
             this.listOption = group;
 
-            this.resetListButton = new TextScaledButtonWidget(screen, getRowRight() - 20, -50, 20, 20, 2f, Component.literal("\u21BB"), button -> {
+            this.resetListButton = new TextScaledButtonWidget(screen, getRowRight() - 20, -50, 20, 20, 2f, new TextComponent("\u21BB"), button -> {
                 group.requestSetDefault();
             });
             group.addListener((opt, val) -> this.resetListButton.active = !opt.isPendingValueDefault() && opt.available());
             this.resetListButton.active = !group.isPendingValueDefault() && group.available();
 
-            this.addListButton = new TooltipButtonWidget(yaclScreen, resetListButton.getX() - 20, -50, 20, 20, Component.literal("+"), Component.translatable("yacl.list.add_top"), btn -> {
+            this.addListButton = new TooltipButtonWidget(yaclScreen, resetListButton.x - 20, -50, 20, 20, new TextComponent("+"), new TranslatableComponent("yacl.list.add_top"), btn -> {
                 group.insertNewEntryToTop();
                 setExpanded(true);
             });
@@ -490,10 +496,10 @@ public class OptionListWidget extends ElementListWidgetExt<OptionListWidget.Entr
 
             super.render(matrices, index, y, x, entryWidth, entryHeight, mouseX, mouseY, hovered, tickDelta);
 
-            int buttonY = expandMinimizeButton.getY();
+            int buttonY = expandMinimizeButton.y;
 
-            resetListButton.setY(buttonY);
-            addListButton.setY(buttonY);
+            resetListButton.y = buttonY;
+            addListButton.y = buttonY;
 
             resetListButton.render(matrices, mouseX, mouseY, tickDelta);
             addListButton.render(matrices, mouseX, mouseY, tickDelta);
@@ -541,7 +547,7 @@ public class OptionListWidget extends ElementListWidgetExt<OptionListWidget.Entr
 
         @Override
         public void render(PoseStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            drawCenteredString(matrices, Minecraft.getInstance().font, Component.translatable("yacl.list.empty").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC), x + entryWidth / 2, y, -1);
+            drawCenteredString(matrices, Minecraft.getInstance().font, new TranslatableComponent("yacl.list.empty").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC), x + entryWidth / 2, y, -1);
         }
 
         @Override
